@@ -473,10 +473,22 @@ const css = `
   }
 
   @media (max-width: 600px) {
+    .app { padding: 24px 16px 72px; }
     .section-body { grid-template-columns: 1fr; }
     .section-body .full-width { grid-column: 1; }
+    .section-header { padding: 16px 18px; }
+    .section-body { padding: 0 18px 20px; }
     .actions { flex-direction: column; }
     .btn { width: 100%; text-align: center; }
+
+    /* Summary: let the title + Edit button wrap instead of squishing, and
+       stack each label above its value so values don't get a 72px column. */
+    .summary-top { flex-wrap: wrap; gap: 10px; padding: 16px 18px; }
+    .summary-section-label { padding: 12px 18px 4px; }
+    .summary-table tr { display: block; padding: 6px 0; }
+    .summary-table td { display: block; width: auto; padding: 2px 18px; }
+    .summary-table td:first-child { width: auto; padding-bottom: 0; }
+    .summary-table td:last-child { font-size: 14px; padding-top: 2px; padding-bottom: 6px; }
   }
 `;
 
