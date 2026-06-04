@@ -480,7 +480,7 @@ const css = `
   }
 `;
 
-export default function App({ onDataChange }) {
+export default function App({ onDataChange, onSave, onExport }) {
   const [data, setData] = useState({});
   const [openSections, setOpenSections] = useState({ demographics: true });
   const [submitted, setSubmitted] = useState(false);
@@ -498,11 +498,15 @@ export default function App({ onDataChange }) {
     setData((prev) => ({ ...prev, [fieldId]: value }));
 
   const toggleMulti = (fieldId, option) => {
-    const current = data[fieldId] || [];
-    const updated = current.includes(option)
-      ? current.filter((o) => o !== option)
-      : [...current, option];
-    setValue(fieldId, updated);
+    // Use the functional updater so toggling several options of the same
+    // field in quick succession reads the latest state (not a stale closure).
+    setData((prev) => {
+      const current = prev[fieldId] || [];
+      const updated = current.includes(option)
+        ? current.filter((o) => o !== option)
+        : [...current, option];
+      return { ...prev, [fieldId]: updated };
+    });
   };
 
   const filledCount = (section) =>
@@ -559,7 +563,7 @@ export default function App({ onDataChange }) {
           </div>
           <div className="actions">
             <button
-              className="btn btn-primary"
+              className="btn btn-secondary"
               onClick={() => {
                 setData({});
                 setOpenSections({ demographics: true });
@@ -568,6 +572,16 @@ export default function App({ onDataChange }) {
             >
               New Case
             </button>
+            {onExport && (
+              <button className="btn btn-secondary" onClick={onExport}>
+                ⬇ Export JSON
+              </button>
+            )}
+            {onSave && (
+              <button className="btn btn-primary" onClick={onSave}>
+                💾 Save to device
+              </button>
+            )}
           </div>
         </div>
       </>

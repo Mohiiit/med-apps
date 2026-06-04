@@ -211,7 +211,9 @@ export default function App() {
             </div>
           </div>
           <ShadowView className="launch-stage">
-            <app.component onDataChange={onDataChange} />
+            {/* onSave/onExport let an app expose its own save action (e.g. the
+                conjunctivitis summary) in addition to the top-bar buttons. */}
+            <app.component onDataChange={onDataChange} onSave={handleSave} onExport={handleExport} />
           </ShadowView>
         </main>
       )}
