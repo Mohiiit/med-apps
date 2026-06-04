@@ -189,19 +189,25 @@ export default function App() {
       {view === "app" && app && (
         <main className="appview">
           <div className="appbar" style={{ "--accent": app.accent }}>
-            <button className="back" onClick={() => setView("catalog")}>← Store</button>
+            <button className="back" onClick={() => setView("catalog")} aria-label="Back to store">
+              ← <span className="btn-label">Store</span>
+            </button>
             <div className="appbar-title">
               <span className="appbar-icon" aria-hidden>{app.icon}</span>
               <span>{app.name}</span>
             </div>
             <div className="appbar-actions">
               {app.collects && (
-                <button className="btn-save" onClick={handleSave} disabled={!hasData}>
-                  💾 Save to device
+                <button className="btn-save" onClick={handleSave} disabled={!hasData} aria-label="Save to device" title="Save to device">
+                  💾 <span className="btn-label">Save to device</span>
                 </button>
               )}
-              <button className="btn-ghost" onClick={handleExport} disabled={!hasData}>⬇ JSON</button>
-              <button className="btn-ghost" onClick={printView}>🖨 PDF</button>
+              <button className="btn-ghost" onClick={handleExport} disabled={!hasData} aria-label="Export JSON" title="Export JSON">
+                ⬇ <span className="btn-label">JSON</span>
+              </button>
+              <button className="btn-ghost" onClick={printView} aria-label="Print / Save as PDF" title="Print / Save as PDF">
+                🖨 <span className="btn-label">PDF</span>
+              </button>
             </div>
           </div>
           <ShadowView className="launch-stage">

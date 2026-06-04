@@ -8,6 +8,7 @@
   --accent: #3fb950;
   --blue: #58a6ff;
   --red: #f85149;
+  --topbar-h: 52px;
   font-family: "Sora", system-ui, -apple-system, sans-serif;
 }
 
@@ -36,6 +37,7 @@ button { font-family: inherit; cursor: pointer; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  min-height: var(--topbar-h);
   padding: 12px 20px;
   background: rgba(13, 17, 23, 0.85);
   backdrop-filter: blur(10px);
@@ -180,7 +182,7 @@ button { font-family: inherit; cursor: pointer; }
 .appview { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .appbar {
   position: sticky;
-  top: 51px;
+  top: var(--topbar-h);
   z-index: 15;
   display: flex;
   align-items: center;
@@ -310,7 +312,48 @@ button { font-family: inherit; cursor: pointer; }
   .topbar, .appbar, .toast { display: none !important; }
 }
 
+/* Label inside a button — hidden on small screens to make icon-only buttons. */
+.btn-label { display: inline; }
+
+/* ── Tablet ────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .topbar { padding: 11px 14px; }
+  .catalog { padding: 28px 16px 72px; }
+  .grid { grid-template-columns: 1fr; }
+}
+
+/* ── Phone ─────────────────────────────────────────────── */
 @media (max-width: 560px) {
-  .appbar-actions .btn-save { padding: 8px 10px; }
-  .btn-ghost { padding: 8px 10px; }
+  :root { --topbar-h: 48px; }
+  .topbar { padding: 10px 12px; gap: 8px; }
+  .brand span { font-size: 15px; }
+  .topbar-right { gap: 8px; }
+  .net { font-size: 10px; }
+  .pill { padding: 6px 11px; font-size: 11px; }
+
+  .catalog { padding: 22px 14px 64px; }
+  .hero { margin-bottom: 22px; }
+  .hero h1 { font-size: 26px; }
+  .hero p { font-size: 13px; }
+  .controls { gap: 10px; margin-bottom: 20px; }
+  .card { padding: 16px; border-radius: 12px; }
+
+  /* App launch bar: collapse action buttons to icons so nothing overflows. */
+  .appbar { padding: 9px 11px; gap: 8px; }
+  .appbar-title { font-size: 13px; gap: 6px; }
+  .appbar-actions { gap: 6px; }
+  .btn-label { display: none; }
+  .back,
+  .btn-save,
+  .btn-ghost { padding: 9px 11px; font-size: 14px; line-height: 1; }
+
+  .saved { padding: 20px 14px 64px; }
+  .saved-head h2 { font-size: 18px; flex-basis: 100%; order: -1; }
+}
+
+/* Stack the saved-panel header cleanly on very narrow screens. */
+@media (max-width: 380px) {
+  .saved-actions { width: 100%; }
+  .saved-actions .btn-ghost,
+  .saved-actions .btn-danger { flex: 1; }
 }

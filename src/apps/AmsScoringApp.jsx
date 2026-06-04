@@ -544,15 +544,23 @@ export default function App({ onDataChange }) {
     HACE_SIGNS.every(s => scores[s.id] !== undefined);
 
   // Report the assessment upward so the store can persist it on demand.
+  // Only report once there is real input — otherwise send {} so the store's
+  // Save button stays disabled (the derived score labels are always present).
   useEffect(() => {
-    onDataChange?.({
-      altitude,
-      scores,
-      haceFeatures,
-      llsTotal,
-      llsLabel: llsInterp.label,
-      haceLabel: haceInterp.label,
-    });
+    const hasInput =
+      altitude !== "" || Object.keys(scores).length > 0 || haceFeatures.length > 0;
+    onDataChange?.(
+      hasInput
+        ? {
+            altitude,
+            scores,
+            haceFeatures,
+            llsTotal,
+            llsLabel: llsInterp.label,
+            haceLabel: haceInterp.label,
+          }
+        : {}
+    );
   }, [altitude, scores, haceFeatures, llsTotal, llsInterp.label, haceInterp.label, onDataChange]);
 
   return (
