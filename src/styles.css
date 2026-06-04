@@ -12,15 +12,22 @@
   font-family: "Sora", system-ui, -apple-system, sans-serif;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
 html, body, #root { height: 100%; }
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: contain; /* no rubber-band reveal of the page behind */
 }
 button { font-family: inherit; cursor: pointer; }
+/* Give interactive elements a quick pressed-state on touch (no sticky :hover). */
+button:active { transform: scale(0.97); }
+@media (hover: none) {
+  .card:hover { transform: none; box-shadow: none; }
+}
 
 .shell {
   display: flex;
@@ -37,8 +44,9 @@ button { font-family: inherit; cursor: pointer; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-height: var(--topbar-h);
-  padding: 12px 20px;
+  min-height: calc(var(--topbar-h) + env(safe-area-inset-top, 0px));
+  padding: calc(12px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px))
+    12px max(20px, env(safe-area-inset-left, 0px));
   background: rgba(13, 17, 23, 0.85);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
@@ -106,7 +114,7 @@ button { font-family: inherit; cursor: pointer; }
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text);
-  font-size: 14px;
+  font-size: 16px; /* >=16px prevents iOS Safari from zooming on focus */
   padding: 11px 14px;
   outline: none;
   transition: border-color 0.15s;
@@ -182,7 +190,7 @@ button { font-family: inherit; cursor: pointer; }
 .appview { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .appbar {
   position: sticky;
-  top: var(--topbar-h);
+  top: calc(var(--topbar-h) + env(safe-area-inset-top, 0px));
   z-index: 15;
   display: flex;
   align-items: center;
@@ -293,7 +301,7 @@ button { font-family: inherit; cursor: pointer; }
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 28px;
+  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
   background: var(--surface-2);
   border: 1px solid var(--border);
@@ -325,29 +333,63 @@ button { font-family: inherit; cursor: pointer; }
 /* ── Phone ─────────────────────────────────────────────── */
 @media (max-width: 560px) {
   :root { --topbar-h: 48px; }
-  .topbar { padding: 10px 12px; gap: 8px; }
+  .topbar {
+    padding: calc(10px + env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px))
+      10px max(12px, env(safe-area-inset-left, 0px));
+    gap: 8px;
+  }
   .brand span { font-size: 15px; }
   .topbar-right { gap: 8px; }
   .net { font-size: 10px; }
-  .pill { padding: 6px 11px; font-size: 11px; }
+  .pill {
+    min-height: 38px;
+    padding: 0 14px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+  }
 
-  .catalog { padding: 22px 14px 64px; }
+  .catalog { padding: 22px 14px calc(64px + env(safe-area-inset-bottom, 0px)); }
   .hero { margin-bottom: 22px; }
   .hero h1 { font-size: 26px; }
   .hero p { font-size: 13px; }
   .controls { gap: 10px; margin-bottom: 20px; }
   .card { padding: 16px; border-radius: 12px; }
 
-  /* App launch bar: collapse action buttons to icons so nothing overflows. */
-  .appbar { padding: 9px 11px; gap: 8px; }
+  /* Bigger, finger-friendly category chips (>=40px tall). */
+  .chip {
+    min-height: 40px;
+    padding: 0 15px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* App launch bar: icon-only actions, each a 44px touch target. */
+  .appbar { padding: 7px 11px; gap: 8px; }
   .appbar-title { font-size: 13px; gap: 6px; }
   .appbar-actions { gap: 6px; }
   .btn-label { display: none; }
   .back,
   .btn-save,
-  .btn-ghost { padding: 9px 11px; font-size: 14px; line-height: 1; }
+  .btn-ghost {
+    min-height: 44px;
+    padding: 0 13px;
+    font-size: 15px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-  .saved { padding: 20px 14px 64px; }
+  /* Inside an app, the store top bar is redundant with the app bar — hide it
+     to reclaim vertical space; the app bar's "Store" button navigates back. */
+  .shell.in-app .topbar { display: none; }
+  .shell.in-app .appbar {
+    top: 0;
+    padding-top: calc(7px + env(safe-area-inset-top, 0px));
+  }
+
+  .saved { padding: 20px 14px calc(64px + env(safe-area-inset-bottom, 0px)); }
   .saved-head h2 { font-size: 18px; flex-basis: 100%; order: -1; }
 }
 

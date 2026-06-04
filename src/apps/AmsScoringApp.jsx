@@ -106,7 +106,8 @@ function interpretHACE(ataxiaScore, msScore, features) {
 
 const css = `
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  .q-opt:active, .feature-item:active, .reset-btn:active { transform: scale(0.99); }
 
   :host {
     display: block;
@@ -479,9 +480,20 @@ const css = `
   }
   .reset-btn:hover { border-color: #475569; color: #94a3b8; }
 
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
+    .wrap { padding: 28px 16px 90px; }
     .score-number { font-size: 48px; }
     .score-banner { gap: 12px; padding: 16px; }
+
+    /* >=16px form text stops iOS Safari from zooming on focus. The unit /
+       ascent-rate dropdowns set font-size inline, so override with !important. */
+    .alt-input { font-size: 16px; }
+    .alt-row select { font-size: 16px !important; }
+
+    /* Bigger tap targets for the scoring rows and HACE feature checklist. */
+    .q-opt { padding: 14px 16px; }
+    .feature-item { padding: 13px 12px; }
+    .reset-btn { padding: 14px 22px; }
   }
 `;
 

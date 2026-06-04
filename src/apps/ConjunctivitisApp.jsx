@@ -228,7 +228,8 @@ const COLORS = {
 
 const css = `
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  .multi-chip:active, .btn:active, .section-header:active { transform: scale(0.98); }
 
   :host {
     display: block;
@@ -479,7 +480,13 @@ const css = `
     .section-header { padding: 16px 18px; }
     .section-body { padding: 0 18px 20px; }
     .actions { flex-direction: column; }
-    .btn { width: 100%; text-align: center; }
+    .btn { width: 100%; text-align: center; padding: 14px 22px; }
+
+    /* >=16px form text stops iOS Safari from zooming on focus. */
+    input[type="text"], input[type="number"], select, textarea { font-size: 16px; padding: 12px 14px; }
+    /* Finger-friendly multiselect chips (~42px) and a touch gap. */
+    .multiselect-wrap { gap: 8px; }
+    .multi-chip { padding: 11px 14px; font-size: 14px; }
 
     /* Summary: let the title + Edit button wrap instead of squishing, and
        stack each label above its value so values don't get a 72px column. */

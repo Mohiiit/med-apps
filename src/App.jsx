@@ -113,7 +113,7 @@ export default function App() {
   }, [query, category]);
 
   return (
-    <div className="shell">
+    <div className={`shell${view === "app" ? " in-app" : ""}`}>
       <header className="topbar">
         <button className="brand" onClick={() => setView("catalog")}>
           <img src={`${import.meta.env.BASE_URL}icon.svg`} alt="" width="26" height="26" />
